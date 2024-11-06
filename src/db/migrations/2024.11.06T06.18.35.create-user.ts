@@ -9,6 +9,7 @@ export const up: Migration = async (params) => {
       CHECK (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
       password VARCHAR(255) NOT NULL DEFAULT 'codeable',
       age INTEGER,
+      CHECK (age > 0),
       role VARCHAR(50) DEFAULT 'user',
       CHECK (role IN ('admin', 'user')) 
  );
