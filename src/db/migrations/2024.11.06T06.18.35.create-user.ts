@@ -5,6 +5,7 @@ export const up: Migration = async (params) => {
     CREATE TABLE users (
       id SERIAL PRIMARY KEY,
       name VARCHAR(80) NOT NULL,
+      CHECK (char_length(name) > 0),
       email VARCHAR(150) UNIQUE NOT NULL,
       CHECK (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
       password VARCHAR(255) NOT NULL DEFAULT 'codeable',

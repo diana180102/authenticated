@@ -8,13 +8,15 @@ import jwt from "jsonwebtoken";
 import { promisify } from "util";
 import fs from "fs";
 import Papa from 'papaparse';
+import { error } from "console";
 
 
 interface CSVRecord {
   name: string;
   email: string;
-  age: number;  // O 'number', dependiendo de cómo se espera en tu CSV
-  // Otros campos, si es necesario
+  age: number; 
+  role: string;
+  password: string;
 }
 
 interface ProcessResult {
@@ -24,7 +26,6 @@ interface ProcessResult {
   errors: Array<{ row: number; details: Record<string, string> }>;
 }
 
-// Función para leer el archivo CSV usando promesas
 
 
 export class UsersService {
@@ -43,9 +44,7 @@ export class UsersService {
             const parsedData = await Papa.parse(fileContent,{
               header:false,
               skipEmptyLines: true, // Can jump fields empty
-              dynamicTyping: true,
-            
-            });
+             });
 
             
 
@@ -58,44 +57,45 @@ export class UsersService {
              
            
 
-            // Procesar los registros
+           
             for (const [index, user]  of parsedData.data.entries() as unknown as [number, any] ) {
                
                 try {
 
                     const mappedUser:CSVRecord = {
-                        name: user[0] as string,
-                        email: user[1] as string, 
-                        age: user[2] as number, 
+                            name: user[0],
+                            email: user[1],
+                            age: Number(user[2]),
+                            role: user[3],
+                            password: user[4],
                         
                       };
 
                     // Validar los datos del usuario con Zod
                     const validatedUser = UsersSchema.parse(mappedUser);
 
-                    // Verificar si el usuario ya existe
+                    
                     const existingUser = await usersData.getUserByEmail(validatedUser.email);
                     if (existingUser) {
-                        results.errors.push({ row: index + 1, details: { error: "User already exists" } });
+                        results.errors.push({ row: index + 1, details: { email: "User already exists" } });
                         continue;
                     }
 
-                    // Encriptar la contraseña si es necesario
+                    
                     const hashedPassword = await bcrypt.hash("codeable", 10);
                     const userToCreate = { ...validatedUser, password: hashedPassword };
                     console.log(userToCreate);
 
-                    // Crear el usuario en la base de datos
+                    
                     const createdUser = await usersData.createUser(userToCreate);
                     results.success.push({ ...createdUser, password: undefined }); 
 
                 } catch (error) {
-                  
-                    if (error instanceof ApiError) {
-                        results.errors.push({ row: index + 1, details: { error: error.message } });
-                    } else {
-                        results.errors.push({ row: index + 1, details: { error: "Unknown error" } });
-                    }
+                    
+                    results.errors.push({
+                        row: index + 1,
+                         details: this.formatZodErrors(error),
+                        });
                 }
             }
         } catch (error) {
@@ -107,6 +107,16 @@ export class UsersService {
       
 
     }
+
+    private formatZodErrors(error: any) {
+    if (error.errors) {
+      return error.errors.reduce((acc: Record<string, string>, err: any) => {
+        acc[err.path.join(".")] = err.message;
+        return acc;
+      }, {});
+    }
+    return { message: ""+ error };
+  }
 
     async loginUser(email:string, password:string){
         const user = await usersData.getUserByEmail(email);

@@ -26,7 +26,7 @@ export default function errorHandler(error:Error, _req:Request, res:Response, _n
             ok:false,
             error:{
                 message: "Error internal server",
-                error: error.stack
+                error: error.message
             }
         })
 
