@@ -15,15 +15,16 @@ export class UsersData {
   async createUser(user:UsersParams){
 
    const query = `
-    INSERT INTO users (name, email, age, role)
-    VALUES ($1, $2, $3, $4)
-    RETURNING id, name, email, age, role;
+    INSERT INTO users (name, email, password, age, role)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING id, name, email, password, age, role;
   `;
-   const values = [user.name, user.email, user.age, user.role];
+   const values = [user.name, user.email, user.password, user.age, user.role];
    const result = await pool.query(query, values);
    return result.rows[0];
       
    }
+
 }
 
 

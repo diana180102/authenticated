@@ -1,32 +1,39 @@
-import { ZodError, ZodIssue, ZodSchema } from "zod";
-import { NextFunction, Request, Response } from "express";
-import { ApiError } from "./error";
+import { NextFunction, Request, Response } from 'express';
+import { ZodError, ZodSchema } from 'zod';
 
 
-export function validationHandler<T> (schema:ZodSchema<T>){
-    return async (req: Request, _res:Response, next:NextFunction)=>{
+
+function formatZodErrors(error: ZodError) {
+    if (error.errors) {
+      return error.errors.reduce((acc: Record<string, string>, err: any) => {
+        acc[err.path.join(".")] = err.message;
+        return acc;
+      }, {});
+    }
+    return { message: " "+ error };
+  }
+
+
+
+
+export function validationHandler<T>(schema:ZodSchema<T>) {
+    return async (req:Request, res:Response, next:NextFunction) => {
         try {
-            const body = schema.parse(req.body);
-            req.body = body;
+            const validatedData = schema.parse(req.body);
+            req.body = validatedData;
+            next();
         } catch (error) {
-            if(error instanceof ZodError){
-                next(new ApiError("Error of validation", 400, formatIssues(error.issues)));
-            }else{
-                next(error)
+            if (error instanceof ZodError) {
+                res.status(400).json({
+                    ok: false,
+                    error: {
+                        message: 'Validation Error',
+                        details: formatZodErrors(error)
+                    }
+                });
+            } else {
+                next(error);
             }
         }
-    }
-}
-
-function formatIssues(issues:ZodIssue[]){
-    const formattedIssues: Record<string, string> = {};
-
-    issues.forEach((issues)=>{
-        /*  Transform the path in a string with dots. "user.email" 
-            The Path indicates in the field that an error
-        */
-        formattedIssues[issues.path.join(".")] = issues.message; 
-    });
-
-    return formattedIssues;
+    };
 }

@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { loginSchema } from "../models/loginModel";
 import { usersService } from "../services/usersService";
 import { ApiError } from "../middleware/error";
+import { AuthenticatedRequest } from "../middleware/authentication";
+
 
 
 export class UsersController{
@@ -26,7 +28,7 @@ export class UsersController{
     }
 
 
-    async createUsers(req:Request, res:Response, next:NextFunction){
+    async createUsers(req:AuthenticatedRequest, res:Response, next:NextFunction){
         try {
             
             const filePath = req.file?.path;  //Dir of file
@@ -42,7 +44,10 @@ export class UsersController{
             res.status(200).json({
                 ok:true,
                 message: "CSV processed successfully",
-                result
+                data:{
+                    success: result.success,
+                    errors: result.errors
+                }
             });
         } catch (error) {
             next(error);

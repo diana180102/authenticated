@@ -4,7 +4,7 @@ import { client } from "../database";
 
 client.connect();
 
-client.query(`DROP DATABASE IF EXIST "${config.db.database}"`, (err) =>{
+client.query(`DROP DATABASE IF EXISTS "${config.db.database}"`, (err) =>{
     if(err){
         console.error(`Error deleting database`, err.stack);
     }else{
