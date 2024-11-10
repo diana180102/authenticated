@@ -21,19 +21,22 @@
     "@types/node": "^22.8.7",
     "@types/papaparse": "^5.3.15",
     "@types/pg": "^8.11.10",
+    "@types/supertest": "^6.0.2",
     "nodemon": "^3.1.7",
+    "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
   },
   "name": "authenticateduser",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db:migrate": "ts-node src/db/scripts/dbMigrate.ts",
-    "db:create": " ts-node src/db/scripts/dbCreate.ts",
-    "db:drop": " ts-node src/db/scripts/dbDrop.ts && rm -f src/db/migrations/migrations.json",
+    "test": "NODE_ENV=test vitest",
+    "db:migrate": "NODE_ENV=test ts-node src/db/scripts/dbMigrate.ts",
+    "db:create": "NODE_ENV=test ts-node src/db/scripts/dbCreate.ts",
+    "db:drop": " NODE_ENV=test ts-node src/db/scripts/dbDrop.ts && rm -f src/db/migrations/migrations.json",
     "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate up"
   },
   "keywords": [],
