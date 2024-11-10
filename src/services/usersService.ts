@@ -108,7 +108,7 @@ export class UsersService {
 
     }
 
-    private formatZodErrors(error: any) {
+  private formatZodErrors(error: any) {
     if (error.errors) {
       return error.errors.reduce((acc: Record<string, string>, err: any) => {
         acc[err.path.join(".")] = err.message;
