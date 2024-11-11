@@ -1,5 +1,5 @@
 import { pool } from "../db/database";
-import { Users, UsersParams, UsersSchema } from "../models/usersModel";
+import { Users, UsersParams } from "../models/usersModel";
 
 
 export class UsersData {

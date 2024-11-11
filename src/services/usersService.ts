@@ -1,14 +1,14 @@
-import { ZodError } from "zod";
+
 import { config } from "../config/config";
 import { usersData } from "../data/usersData";
 import { ApiError } from "../middleware/error";
 import { UsersSchema, UsersParams,  } from "../models/usersModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { promisify } from "util";
+
 import fs from "fs";
 import Papa from 'papaparse';
-import { error } from "console";
+
 
 
 interface CSVRecord {

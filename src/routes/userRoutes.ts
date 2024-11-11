@@ -2,7 +2,7 @@ import { Router } from "express";
 import { UsersController } from "../controller/userController";
 import { upload } from "../middleware/upload";
 import { validationHandler } from "../middleware/validations";
-import { UsersSchema } from "../models/usersModel";
+
 import { authentication } from "../middleware/authentication";
 import { authorization } from "../middleware/authorization";
 import { loginSchema } from "../models/loginModel";
