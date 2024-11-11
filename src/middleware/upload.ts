@@ -1,12 +1,23 @@
 import multer from "multer";
 import { ApiError } from "./error";
 import path from "path";
+import fs from "fs";
 
 // Configuración de Multer para almacenar los archivos temporalmente
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null,  path.resolve(__dirname, '/uploads')); // Carpeta temporal para almacenar el archivo
+        const uploadDir = process.env["NODE_ENV"] === 'production' ? '/tmp/uploads' : path.join(__dirname, '../uploads');;
+       
+        // Crea la carpeta si no existe
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+       
+       cb(null,  path.resolve(uploadDir)); // Carpeta temporal para almacenar el archivo
+    
+    
     },
+
     filename: (req, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname); // Nombre único para cada archivo
     }
