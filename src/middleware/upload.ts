@@ -5,7 +5,7 @@ import path from "path";
 // Configuración de Multer para almacenar los archivos temporalmente
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null,  path.resolve(__dirname, '../uploads')); // Carpeta temporal para almacenar el archivo
+        cb(null,  path.resolve(__dirname, '/uploads')); // Carpeta temporal para almacenar el archivo
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname); // Nombre único para cada archivo
