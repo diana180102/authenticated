@@ -36,11 +36,11 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "test": "NODE_ENV=test vitest",
+    "test": " vitest",
     "start": "node build/index.js",
-    "db:migrate": "NODE_ENV=test ts-node src/db/scripts/dbMigrate.ts",
-    "db:create": "NODE_ENV=test ts-node src/db/scripts/dbCreate.ts",
-    "db:drop": " NODE_ENV=test ts-node src/db/scripts/dbDrop.ts && rm -f src/db/migrations/migrations.json",
+    "db:migrate": "ts-node src/db/scripts/dbMigrate.ts",
+    "db:create": "ts-node src/db/scripts/dbCreate.ts",
+    "db:drop": " ts-node src/db/scripts/dbDrop.ts && rm -f src/db/migrations/migrations.json",
     "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate up"
   },
   "keywords": [],
