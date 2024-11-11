@@ -30,7 +30,33 @@ interface ProcessResult {
 
 export class UsersService {
     
-    async createUser(filePath:string): Promise<ProcessResult>{
+
+   async registerUser(data:UsersParams){
+       try {
+         
+         const existingUser =  await usersData.getUserByEmail(data.email);
+         const hashedPassword = await bcrypt.hash(data.password, 10);
+
+         if(existingUser){
+            throw new ApiError("User already exists", 400);
+         }
+
+              const userCreate = {
+              ...data,
+              password: hashedPassword,
+             };
+         
+         const dataUser = await usersData.createUser(userCreate);
+
+         const { password, ...userWithoutPassword } = dataUser;
+         return userWithoutPassword;
+
+       } catch (error) {
+         throw new ApiError("Failed Insertion data", 400);
+       }
+   }
+
+    async uploadUser(filePath:string): Promise<ProcessResult>{
          
         const results: ProcessResult = { success: [], errors: [] };
         

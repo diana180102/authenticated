@@ -3,6 +3,7 @@ import { loginSchema } from "../models/loginModel";
 import { usersService } from "../services/usersService";
 import { ApiError } from "../middleware/error";
 import { AuthenticatedRequest } from "../middleware/authentication";
+import { UsersSchema } from "../models/usersModel";
 
 
 
@@ -28,7 +29,7 @@ export class UsersController{
     }
 
 
-    async createUsers(req:AuthenticatedRequest, res:Response, next:NextFunction){
+    async UploadUsers(req:AuthenticatedRequest, res:Response, next:NextFunction){
         try {
             
             const filePath = req.file?.path;  //Dir of file
@@ -38,7 +39,7 @@ export class UsersController{
                 throw new ApiError("No CSV file provided", 400);
             }
 
-            const result = await usersService.createUser(filePath);
+            const result = await usersService.uploadUser(filePath);
             console.log("result"+ result);
 
             res.status(200).json({
@@ -51,6 +52,21 @@ export class UsersController{
             });
         } catch (error) {
             next(error);
+        }
+    }
+
+    async registerUser(req:Request, res:Response, next:NextFunction){
+        try {
+            const userData = UsersSchema.parse(req.body);
+            const data = await usersService.registerUser(userData);
+
+            res.status(200).json({
+            ok: true,
+            message: "User created success",
+            data: data
+         });
+        } catch (error) {
+             next(error);
         }
     }
 
