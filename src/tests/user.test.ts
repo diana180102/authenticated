@@ -5,7 +5,7 @@ import { app } from "..";
 import jwt from "jsonwebtoken";
 import { config } from "../config/config";
 import path from "path";
-import { response } from "express";
+
 
 const tokenAdmin = jwt.sign(
   { email: "naty@mail.com", role: "admin" },
