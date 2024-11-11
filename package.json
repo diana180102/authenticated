@@ -37,7 +37,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "test": " vitest",
-    "start": "node build/index.js",
+    "start": "npm run db:migrate && node build/index.js",
     "db:migrate": "ts-node src/db/scripts/dbMigrate.ts",
     "db:create": "ts-node src/db/scripts/dbCreate.ts",
     "db:drop": " ts-node src/db/scripts/dbDrop.ts && rm -f src/db/migrations/migrations.json",
