@@ -25,15 +25,24 @@ RESTful API for allow users register data por middle of  upload a file csv to US
 
 
 
-## Run Locally
+## Deployment
 
-Clonar  proyecto
+URL where the API was deployed
 
 ```bash
-  git clone https://github.com/codeableorg/postable-diana180102.git
+https://authenticated.onrender.com
 ```
 
-Ir a directorio de proyecto
+
+## Run Locally
+
+Clone project
+
+```bash
+  git clone https://github.com/diana180102/authenticated.git
+```
+
+Go to directory
 
 ```bash
   cd postable-diana180102.git
@@ -113,21 +122,21 @@ Run migrations
 
 ## Environment Variables
 
-Para ejecutar este proyecto, deberá agregar las siguientes variables de entorno a su archivo .env
+Add file in project -> .env
 
-`PGHOST`  Host de la base de datos
+`PGHOST`  Host BD
 
-`PGPORT`  Puerto de la base de datos
+`PGPORT`  Port BD
 
-`PGUSER`  Usuario de la base de datos
+`PGUSER`  User BD
 
-`PGPASSWORD`  Password de la base de datos
+`PGPASSWORD`  Password BD
 
-`PGDATABASE`  Nombre de la base de datos
+`PGDATABASE`  Name BD
 
-`PORT`  Puesto de servidor para ejecutar proyecto
+`PORT`  Port server
 
-`JWT_SECRET`  Clave secreta para la autenticación 
+`JWT_SECRET`  Key secret of authentication 
 
 
 
@@ -149,8 +158,8 @@ This endpoint the uploading of files of type
 
 | Parameter Query| Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `file` | `file` | **Requiere** File type CSV to upload |
-| `API_KEY`      | `string` | **Requiere** API_KEY/TOKEN |
+| `file` | `file` | **Required** File type CSV to upload |
+| `API_KEY`      | `string` | **Required** API_KEY/TOKEN |
 
 
 
@@ -159,7 +168,12 @@ This endpoint the uploading of files of type
 ```http
   POST /login
 ```
- **email, password:** Credenciales requeridas para el inicio de sesión..
+ **email, password:** Credentials required
+
+```http
+  POST /register
+```
+ **name, email, password, age:** Fields requireds
 
 
 
@@ -174,7 +188,7 @@ This endpoint the uploading of files of type
 
 ## Running Tests
 
-Para ejecutar pruebas, ejecute el siguiente comando
+Run for Testing
 
 ```bash
   npm run test
@@ -182,7 +196,7 @@ Para ejecutar pruebas, ejecute el siguiente comando
 
 ```
 
-Agregar en script ```package.json > scripts **NODE_ENV=test**``` 
+Add in script ```package.json > scripts **NODE_ENV=test**``` 
 
 ```bash
  "test": " NODE_ENV=test vitest",
